@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Eeppinen salain</title>
+    <meta charset="UTF-8">
+    <script>
+      function salaa() {
+        
+        // Haetaan lomakekenttien sisällöt omiin muuttujiinsa.
+        let salattava = document.getElementById("salattava").value;
+        let korvattavat = document.getElementById("korvattavat").value;
+        let korvaavat = document.getElementById("korvaavat").value;
+        let salattu = "";
+
+        // Muutetaan salattava teksti isoiksi kirjaimiksi.
+        salattava = salattava.toUpperCase();
+
+        // Lisätään korvattavien merkkien perään aakkosto.
+        korvattavat = korvattavat + "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ"
+
+        // Lisätään korvaavien perään pisteitä tarvittava määrä.
+        korvaavat = korvaavat + ".".repeat(korvattavat.length);
+
+        // Käydään salattava teksti merkki kerrallaan lävitse.
+        for (let index = 0; index < salattava.length; index++) {
+
+          // Haetaan korvattava merkki.  
+          let merkki = salattava.charAt(index);
+
+          // Etsitään merkin paikka korvattavien merkkien joukosta.
+          let paikka = korvattavat.indexOf(merkki);
+
+          if (paikka >= 0) {
+            let korvaava = korvaavat.charAt(paikka);
+            salattu = salattu + korvaava;
+          } else {
+            salattu = salattu + merkki;
+          }
+
+        }
+
+        document.getElementById("salattu").value = salattu;
+
+      }
+
+      function sekoita() {
+        let korvattavat = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
+        let korvaustaulu = korvattavat.split('');
+        for (let index = 0; index < korvaustaulu.length; index++) {
+          // Arvotaan taulukosta satunnainen kohta.
+          let arvottu = Math.floor(Math.random() * korvaustaulu.length);
+          let temp = korvaustaulu[index];
+          korvaustaulu[index] = korvaustaulu[arvottu];
+          korvaustaulu[arvottu] = temp;
+        }
+        let korvaavat = korvaustaulu.join('');
+        document.getElementById("korvattavat").value = korvattavat;
+        document.getElementById("korvaavat").value = korvaavat;
+        salaa();
+      }
+
+    </script>
+  </head>
+  <body>
+    <!-- Sivun pääotsikko -->
+    <h1>Eeppinen salain</h1>
+
+    <label for="salattava">Salattava teksti:</label><br>
+    <textarea id="salattava"
+              name="salattava"
+              rows="10"
+              cols="80"
+              oninput="salaa()"></textarea><br>
+
+    <label for="korvattavat">Korvattavat merkit:</label><br>
+    <input type="text"
+           id="korvattavat"
+           name="korvattavat"
+           size="50"
+           value="ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ"
+           oninput="salaa()"><br>
+
+    <label for="korvaavat">Korvaavat merkit:</label><br>
+    <input type="text"
+           id="korvaavat"
+           name="korvaavat"
+           size="50"
+           value="DEFGHIJKLMNOPQRSTUVWXYZÅÄÖABC"
+           oninput="salaa()"><br>
+
+    <button onclick="sekoita()">SEKOITA</button><br>
+
+    <label for="salattu">Salattu teksti:</label><br>
+    <textarea id="salattu"
+              name="salattu"
+              rows="10"
+              cols="80"></textarea><br>
+
+    <button onclick="salaa()">SALAA</button>
+
+
+
+
+  </body>
+</html>
